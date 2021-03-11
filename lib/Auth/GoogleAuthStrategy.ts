@@ -2,8 +2,9 @@ import * as Google from "expo-google-app-auth";
 import AuthStrategy from "./AuthStrategy";
 
 export class GoogleAuthStrategy implements AuthStrategy {
-  private config = {
+  private config: Google.GoogleLogInConfig = {
     iosClientId: process.env.YOUTUBE_OAUTH_IOS_APP_ID,
+    scopes: ["https://www.googleapis.com/auth/youtube.readonly"],
   };
 
   async signIn(): Promise<AuthCancelled | AuthInfo> {
