@@ -1,19 +1,38 @@
-import React from "react";
-import styled from "@emotion/native";
 import GoogleIcon from "#assets/google-icon.svg";
 import { useAuth } from "#context/AuthContext";
-import { View, Text, Button } from "react-native";
 import { GoogleAuth } from "#lib/Auth";
+import { YoutubeAPI } from "#lib/YoutubeAPI";
+import styled from "@emotion/native";
+import React from "react";
+import { Button, ScrollView, Text, TextInput } from "react-native";
 
 export default function Main() {
-  const { userInfo, isAuthenticated, signIn, signOut } = useAuth();
+  const { userInfo, token, isAuthenticated, signIn, signOut } = useAuth();
+  const [search, setSearch] = React.useState("");
+  const [term, setTerm] = React.useState("Search");
+
+  function termHandler(text: string) {
+    setTerm(text);
+  }
+
+  function searchHandler(api: YoutubeAPI) {
+    api.search(term).then(setSearch);
+  }
 
   if (isAuthenticated) {
+    const yAPI = new YoutubeAPI(token);
+
     return (
-      <View>
-        <Text>{JSON.stringify(userInfo, null, 2)} </Text>
+      <ScrollView>
+        <Text>{search} </Text>
+        <TextInput
+          onChangeText={termHandler}
+          returnKeyType="search"
+          value={term}
+          onSubmitEditing={() => searchHandler(yAPI)}
+        />
         <Button onPress={() => signOut(GoogleAuth)} title="Sign out" />
-      </View>
+      </ScrollView>
     );
   }
 
