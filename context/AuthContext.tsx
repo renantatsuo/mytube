@@ -34,7 +34,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
     execute,
   } = useAsync<AuthInfo>();
 
-  const isAuthenticated = !!authState;
+  const isAuthenticated = authState?.token && authState.userInfo;
 
   React.useEffect(() => {
     if (authState) {
