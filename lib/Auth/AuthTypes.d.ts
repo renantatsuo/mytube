@@ -12,3 +12,11 @@ type AuthInfo = {
 type AuthCancelled = {
   cancelled: true;
 };
+
+type AuthFunction = (authStrategy: AuthStrategy) => void;
+
+type AuthResources = AuthInfo & {
+  signIn: AuthFunction;
+  signOut: AuthFunction;
+  isAuthenticated: boolean;
+};

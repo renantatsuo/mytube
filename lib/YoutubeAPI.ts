@@ -1,4 +1,4 @@
-import HttpClient, { ApiClient } from "./HttpClient";
+import { ApiClient } from "./HttpClient";
 
 export class YoutubeAPI {
   private client: ApiClient;

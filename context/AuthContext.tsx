@@ -6,12 +6,6 @@ import { Text, View } from "react-native";
 
 const AUTH_STORAGE_KEY = "__auth_info__";
 
-type AuthResources = AuthInfo & {
-  signIn: (AuthProvider: AuthStrategy) => void;
-  signOut: (AuthProvider: AuthStrategy) => void;
-  isAuthenticated: boolean;
-};
-
 const AuthContext = React.createContext<AuthResources | any>({});
 AuthContext.displayName = "AuthContext";
 
@@ -40,6 +34,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
     if (authState) {
       AsyncStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authState));
     }
+    AsyncStorage.removeItem(AUTH_STORAGE_KEY);
   }, [authState]);
 
   React.useEffect(() => {
@@ -51,9 +46,9 @@ function AuthProvider({ children }: { children: ReactNode }) {
     setAuthState(authInfo);
   }
 
-  async function signOut(authProvider: AuthStrategy) {
+  async function signOut(auth: AuthStrategy) {
     if (authState) {
-      await authProvider.signOut(authState.token);
+      await auth.signOut(authState.token);
       setAuthState(undefined);
     }
   }
