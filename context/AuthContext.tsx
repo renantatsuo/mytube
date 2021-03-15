@@ -28,13 +28,14 @@ function AuthProvider({ children }: { children: ReactNode }) {
     execute,
   } = useAsync<AuthInfo>();
 
-  const isAuthenticated = authState?.token && authState.userInfo;
+  const isAuthenticated = authState?.token && authState?.userInfo;
 
   React.useEffect(() => {
     if (authState) {
       AsyncStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authState));
+    } else {
+      AsyncStorage.removeItem(AUTH_STORAGE_KEY);
     }
-    AsyncStorage.removeItem(AUTH_STORAGE_KEY);
   }, [authState]);
 
   React.useEffect(() => {
