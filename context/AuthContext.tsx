@@ -31,10 +31,10 @@ function AuthProvider({ children }: { children: ReactNode }) {
   const isAuthenticated = authState?.token && authState?.userInfo;
 
   React.useEffect(() => {
-    if (authState) {
-      AsyncStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authState));
-    } else {
+    if (authState === null) {
       AsyncStorage.removeItem(AUTH_STORAGE_KEY);
+    } else {
+      AsyncStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authState));
     }
   }, [authState]);
 
@@ -50,7 +50,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
   async function signOut(auth: AuthStrategy) {
     if (authState) {
       await auth.signOut(authState.token);
-      setAuthState(undefined);
+      setAuthState(null);
     }
   }
 
