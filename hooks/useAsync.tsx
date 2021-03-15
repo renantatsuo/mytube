@@ -77,7 +77,6 @@ function useAsync<T>() {
     isError: status === AsyncStatus.REJECTED,
     isResolved: status === AsyncStatus.RESOLVED,
     error,
-    status,
     data,
     execute,
     setData,
