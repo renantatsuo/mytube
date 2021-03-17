@@ -2,25 +2,40 @@ import { useAuth } from "#context/AuthContext";
 import { YoutubeAPI } from "#lib/YoutubeAPI";
 import { useAsync } from "./useAsync";
 
-function useYoutube() {
+type SearchResult = YoutubeVideoResponse;
+
+export function useYoutube() {
   const {
     execute,
     data: searchResult,
+    isPending,
     ...async
-  } = useAsync<YoutubeSearchResult>();
+  } = useAsync<SearchResult>();
   const { token } = useAuth();
   const youtubeAPI = new YoutubeAPI(token);
 
-  async function search(searchTerm: string): Promise<void> {
-    execute(youtubeAPI.search(searchTerm));
+  async function search(searchTerm: string, options: any = {}): Promise<void> {
+    if (isPending) {
+      return;
+    }
+
+    const searchResult = await youtubeAPI.search(searchTerm);
+    const videoIds = searchResult.items.map((item) => item.id.videoId);
+
+    const videos = youtubeAPI.getVideos(...videoIds).then(({ items }) => ({
+      ...searchResult,
+      items,
+    }));
+    execute(videos);
   }
 
   return {
-    searchResult,
     search,
-    videos: searchResult?.items,
-    ...async,
+    searchContext: {
+      searchResult,
+      videos: searchResult?.items || [],
+      isPending,
+      ...async,
+    },
   } as const;
 }
-
-export { useYoutube };
