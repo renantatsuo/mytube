@@ -7,7 +7,6 @@ type ApiClientConfig = {
   baseUrl?: string;
   token: string;
 };
-
 export class ApiClient {
   private config: ApiClientConfig;
 
@@ -22,7 +21,7 @@ export class ApiClient {
         ...options?.headers,
         authorization: `Bearer ${this.config.token}`,
       },
-    });
+    }).then(JSON.parse);
   }
 }
 
@@ -50,6 +49,6 @@ async function get(
 }
 
 export default {
-  request,
   get,
+  request,
 };
