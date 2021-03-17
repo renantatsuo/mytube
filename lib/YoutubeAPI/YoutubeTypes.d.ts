@@ -1,12 +1,38 @@
-type YoutubeResource = {
+type YoutubeResponse<T> = {
+  kind: string;
+  etag: string;
+  nextPageToken: string;
+  prevPageToken: string;
+  pageInfo: {
+    totalResults: number;
+    resultsPerPage: number;
+  };
+  items: Array<T>;
+};
+
+type YoutubeSearchResponse = YoutubeResponse<YoutubeSearchResource> & {
+  kind: "youtube#searchListResponse";
+};
+
+type YoutubeSearchResource = {
   kind: "youtube#searchResult";
-  etag: etag;
+  etag: string;
   id: {
     kind: string;
     videoId: string;
     channelId: string;
     playlistId: string;
   };
+};
+
+type YoutubeVideoResponse = YoutubeResponse<YoutubeVideoResource> & {
+  kind: "youtube#searchListResponse";
+};
+
+type YoutubeVideoResource = {
+  kind: "youtube#video";
+  etag: string;
+  id: string;
   snippet: {
     publishedAt: datetime;
     channelId: string;
@@ -15,22 +41,19 @@ type YoutubeResource = {
     thumbnails: {
       [key: string]: {
         url: string;
-        width: integer;
-        height: integer;
+        width: number;
+        height: number;
       };
     };
     channelTitle: string;
+    tags: Array<string>;
+    categoryId: string;
   };
-};
-
-type YoutubeSearchResult = {
-  kind: "youtube#searchListResponse";
-  etag: etag;
-  nextPageToken: string;
-  prevPageToken: string;
-  pageInfo: {
-    totalResults: integer;
-    resultsPerPage: integer;
+  statistics: {
+    viewCount: number;
+    likeCount: number;
+    dislikeCount: number;
+    favoriteCount: number;
+    commentCount: number;
   };
-  items: Array<YoutubeResource>;
 };
