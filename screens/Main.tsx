@@ -5,12 +5,12 @@ import AuthenticatedApp from "./AuthenticatedApp";
 import UnauthenticatedApp from "./UnauthenticatedApp";
 
 export default function Main() {
-  const { token, isAuthenticated, signIn, signOut } = useAuth();
+  const { isAuthenticated, signIn, signOut } = useAuth();
 
   return (
     <AppWrapper>
       {isAuthenticated ? (
-        <AuthenticatedApp token={token} signOut={signOut} />
+        <AuthenticatedApp signOut={signOut} />
       ) : (
         <UnauthenticatedApp signIn={signIn} />
       )}
